@@ -7,12 +7,8 @@ module.exports = function (app) {
   });
 
   app.get('/cars', function (req, res) {
-    var data = app.get('store'), results = [];
-
-    // combine data if separated by groupBy. Alternatively, use pagination
-    // for(var key in data) {
-    //   results = results.concat(data[key]);
-    // }
+    var data = app.get('store');
+    var results = data.slice();
 
     if(req.query.sort){
       var sortParams = req.query.sort.split(',');
@@ -22,7 +18,7 @@ module.exports = function (app) {
     res.send(results);
   });
 
-  app.get('/cars', function (req, res) {
+  app.get('/range', function (req, res) {
     var data = app.get('store');
     var start = req.query.start;
     var end = req.query.end;

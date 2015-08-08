@@ -6,7 +6,7 @@ var API_LIMIT = 10000;
 var retrieveData = function (app) {
 
   // replace store with an object when utilizing groupBy
-  var store = [], totalEntries, numCalls, offset = 0, data;
+  var store = [], priceStore = {}, totalEntries, numCalls, offset = 0, data;
 
   var url = 'http://interview.carlypso.com/count';
   request(url, function (error, response, body) {
@@ -21,11 +21,10 @@ var retrieveData = function (app) {
       request(url2, function (error, response, body) {
         if (!error && response.statusCode === 200) {
           data = JSON.parse(body).value;
+          groupBy(priceStore, data, function(item){
+            return Math.ceil(item.price * 1000) / 1000;
+          });
           store = store.concat(data);
-          // use groupBy instead to preprocess data for faster than linear retrieval
-          // groupBy(store, data, function(item){
-          //   return Math.ceil(item.price * 1000) / 1000;
-          // });
           numCalls = 0;
           console.log("numCalls:", numCalls);
         }
@@ -33,8 +32,8 @@ var retrieveData = function (app) {
           offset = offset + API_LIMIT;
           multiRequest();
         } else {
+          app.set('priceStore', priceStore);
           app.set('store', store);
-          console.log("store:", store);
         }
       });
     };
