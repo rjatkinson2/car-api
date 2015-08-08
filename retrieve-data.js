@@ -1,9 +1,11 @@
 var request = require('request');
 var multiRequest = require('./api-utils').multiRequest;
+var groupBy = require('./api-utils').groupBy;
 var API_LIMIT = 10000;
 
 var retrieveData = function (app) {
 
+  // replace store with an object when utilizing groupBy
   var store = [], totalEntries, numCalls, offset = 0, data;
 
   var url = 'http://interview.carlypso.com/count';
@@ -20,6 +22,10 @@ var retrieveData = function (app) {
         if (!error && response.statusCode === 200) {
           data = JSON.parse(body).value;
           store = store.concat(data);
+          // use groupBy instead to preprocess data for faster than linear retrieval
+          // groupBy(store, data, function(item){
+          //   return Math.ceil(item.price * 1000) / 1000;
+          // });
           numCalls = 0;
           console.log("numCalls:", numCalls);
         }

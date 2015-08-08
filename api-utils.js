@@ -11,11 +11,24 @@ var multiSort = function (array, fields) {
   });
 };
 
+var groupBy = function (store, array, iteratee) {
+  for (var i = 0; i < array.length; i++) {
+    property = iteratee(array[i]);
+    if (store[property] === undefined) {
+      store[property] = [array[i]];
+    } else {
+      store[property].push(array[i]);
+    }
+  };
+};
+
 var multiRequest = function (numCalls, offset, app, limit) {
 
 };
 
+
 module.exports = {
   multiSort: multiSort,
+  groupBy: groupBy,
   multiRequest: multiRequest
 };
