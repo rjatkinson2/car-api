@@ -25,7 +25,7 @@ var retrieveData = function (app) {
             return Math.ceil(item.price * 1000) / 1000;
           });
           store = store.concat(data);
-          numCalls = 0;
+          numCalls--;
           console.log("numCalls:", numCalls);
         }
         if (numCalls > 0) {
@@ -34,6 +34,7 @@ var retrieveData = function (app) {
         } else {
           app.set('priceStore', priceStore);
           app.set('store', store);
+          console.log("preprocessing complete - api is ready for use");
         }
       });
     };
